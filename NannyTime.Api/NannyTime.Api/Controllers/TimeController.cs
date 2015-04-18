@@ -8,17 +8,17 @@ namespace NannyTime.Api.Controllers
 {
     public class TimeController : ApiController
     {
-        private readonly NannyTimeDAL _nannyTimeDal;
+        private readonly NannyTimeDAL _nannyTimeDAL;
 
         public TimeController()
         {
-            _nannyTimeDal = new NannyTimeDAL();
+            _nannyTimeDAL = new NannyTimeDAL();
         }
 
         [HttpPost]
         public HttpResponseMessage Time(Time timeData)
         {
-            _nannyTimeDal.SaveTime(timeData);
+            _nannyTimeDAL.SaveTime(timeData);
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
