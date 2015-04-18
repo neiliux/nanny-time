@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using NannyTime.Api.DAL;
 using NannyTime.Api.Models;
@@ -20,6 +22,13 @@ namespace NannyTime.Api.Controllers
         {
             _nannyTimeDAL.SaveTime(timeData);
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetAllData()
+        {
+            IEnumerable<Time> timeValues = _nannyTimeDAL.GetAllData();
+            return Request.CreateResponse(HttpStatusCode.OK, timeValues, new JsonMediaTypeFormatter());
         }
     }
 }

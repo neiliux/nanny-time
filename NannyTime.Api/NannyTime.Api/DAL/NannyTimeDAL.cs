@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 using NannyTime.Api.Models;
@@ -15,20 +17,39 @@ namespace NannyTime.Api.DAL
 
         public void SaveTime(Time timeData)
         {
-            XDocument data = GetData();
-            if (data == null || data.Root == null)
+            XDocument document = GetData();
+            if (document == null || document.Root == null)
             {
                 throw new NullReferenceException("Data is invalid");
             }
 
-            data.Root.Add(
+            document.Root.Add(
                 new XElement("time", 
                     new XElement("date", timeData.Date),
                     new XElement("start", timeData.StartTime),
                     new XElement("end", timeData.StopTime),
                     new XElement("comment", timeData.Comment)));
 
-            data.Save(GetPath());
+            document.Save(GetPath());
+        }
+
+        public IEnumerable<Time> GetAllData()
+        {
+            XDocument document = GetData();
+            if (document == null || document.Root == null)
+            {
+                throw new NullReferenceException("Data is invalid");
+            }
+
+            return document.Root
+                .Descendants("time")
+                .Select(t => new Time
+                {
+                    Comment = (string) t.Element("comment"),
+                    Date = (DateTime)t.Element("date"),
+                    StartTime = (int)t.Element("start"),
+                    StopTime = (int)t.Element("end")
+                });
         }
 
         private static string GetPath()

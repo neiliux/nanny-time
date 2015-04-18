@@ -14,6 +14,7 @@ namespace NannyTime.Api
             //    defaults: new { id = RouteParameter.Optional }
             //);
 
+            config.Routes.MapHttpRoute("GetAllData", "get", new {controller = "Time", action = "GetAllData"});
             config.Routes.MapHttpRoute("SubmitTime", "submit", new { controller = "Time", action = "Time" });
         }
     }
