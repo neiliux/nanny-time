@@ -1,0 +1,6 @@
+web-client/node_modules/
+web-client/bower_components/
+NannyTime.Api/packages/
+NannyTime.Api/NannyTime.Api/bin/
+NannyTime.Api/NannyTime.Api/obj/
+NannyTime.Api/NannyTime.Api/App_Data/
