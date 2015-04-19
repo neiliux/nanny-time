@@ -10,37 +10,43 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>04/18/2015 14:11:30</publishTime>
+      <publishTime>04/18/2015 16:20:12</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>04/18/2015 14:11:30</publishTime>
+      <publishTime>04/18/2015 16:20:12</publishTime>
     </File>
     <File Include="bin/NannyTime.Api.dll">
-      <publishTime>04/18/2015 13:33:28</publishTime>
+      <publishTime>04/18/2015 16:20:11</publishTime>
     </File>
     <File Include="bin/NannyTime.Api.pdb">
-      <publishTime>04/18/2015 13:33:28</publishTime>
+      <publishTime>04/18/2015 16:20:11</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>04/18/2015 11:47:53</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
-      <publishTime>04/18/2015 11:47:53</publishTime>
+      <publishTime>04/18/2015 16:15:55</publishTime>
+    </File>
+    <File Include="bin/System.Web.Cors.dll">
+      <publishTime>04/18/2015 16:15:55</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.Cors.dll">
+      <publishTime>04/18/2015 16:15:55</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
-      <publishTime>04/18/2015 11:47:53</publishTime>
+      <publishTime>04/18/2015 16:15:55</publishTime>
     </File>
     <File Include="bin/System.Web.Http.WebHost.dll">
       <publishTime>04/18/2015 11:47:53</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>04/18/2015 11:47:53</publishTime>
+      <publishTime>04/18/2015 16:15:57</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>04/18/2015 14:11:29</publishTime>
+      <publishTime>04/18/2015 16:20:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/18/2015 14:11:29</publishTime>
+      <publishTime>04/18/2015 16:17:50</publishTime>
     </File>
   </ItemGroup>
 </Project>

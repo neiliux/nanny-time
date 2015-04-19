@@ -3,11 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using NannyTime.Api.DAL;
 using NannyTime.Api.Models;
 
 namespace NannyTime.Api.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class TimeController : ApiController
     {
         private readonly NannyTimeDAL _nannyTimeDAL;
