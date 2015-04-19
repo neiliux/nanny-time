@@ -48,8 +48,8 @@ nannyTimeModule.controller('reportsController', ['$scope', '$http',
         };
     }]);
 
-nannyTimeModule.controller('submitTimeController', ['$scope', '$http',
-    function($scope, $http) {
+nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$location',
+    function($scope, $http, $location) {
         function createMilitaryTime(date) {
             var rawString = date.toLocaleTimeString().toLocaleLowerCase();
             var rawStringParts = rawString.split(':');
@@ -66,18 +66,31 @@ nannyTimeModule.controller('submitTimeController', ['$scope', '$http',
         }
 
         $scope.selectedDate = new Date();
-        $scope.startTime = null;
-        $scope.endTime = null;
+        $scope.startTime = new Date();
+        $scope.startTime.setHours(7, 0, 0);
+        $scope.endTime = new Date();
+        $scope.endTime.setHours(17, 0, 0);
+        $scope.submissionComplete = false;
+        $scope.submissionInProgress = false;
 
         $scope.submit = function() {
             console.log($scope.startTime + ' ' + createMilitaryTime($scope.startTime));
             console.log($scope.endTime + ' ' + createMilitaryTime($scope.endTime));
+
+            $scope.submissionInProgress = true;
 
             $http.post('http://nanny.htmlbuffet.com/api/submit', {
                 comment: '',
                 date: $scope.selectedDate,
                 startTime: createMilitaryTime($scope.startTime),
                 stopTime: createMilitaryTime($scope.endTime)
+            }).then(function() {
+                $scope.submissionInProgress = false;
+                $scope.submissionComplete = true;
             });
         };
+
+        $scope.submitMoreTime = function() {
+            $location.path('/submit');
+        }
     }]);

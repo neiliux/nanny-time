@@ -1,5 +1,4 @@
 <div class="submit-time-container">
-    SUBMIT TIME
     <div>
         <label>Date</label>
         <input type="text" bs-datepicker ng-model="selectedDate" />
@@ -12,7 +11,15 @@
         <label>Stop Time</label>
         <input type="text" bs-timepicker ng-model="endTime" />
     </div>
-    <div>
+    <div data-ng-show="!submissionComplete && !submissionInProgress">
         <button class="btn btn-primary btn-large" data-ng-click="submit()">Save</button>
+    </div>
+    <div data-ng-show="submissionInProgress" class="please-wait">
+        <span>Please wait... Time is being submitted</span>
+    </div>
+    <div data-ng-show="submissionComplete" class="success">
+        <span>Success</span>
+        <br/><br/>
+        <button class="btn btn-primary btn-large" data-ng-click="submitMoreTime()">Add New Entry</button>
     </div>
 </div>
