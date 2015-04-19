@@ -1,0 +1,16 @@
+{
+    "unused": true,
+    "curly": true,
+    "eqeqeq": true,
+    "es5": false,
+    "freeze": true,
+    "latedef": true,
+    "undef": true,
+    "globals": {
+        "jQuery": true,
+        "module": true,
+        "define": true,
+        "describe": true,
+        "it": true
+    }
+}

@@ -2,12 +2,20 @@
 <html data-ng-app="nannyTime">
 <head>
     <title>nanny-time</title>
+
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/underscore/underscore.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/angular-strap/dist/angular-strap.js"></script>
+    <script src="/bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
     <script src="nannyTime.js"></script>
 </head>
-<body data-ng-controller="app">
-    <h1>Smorgasbord-Generator</h1>
+<body>
+    <div data-ng-view></div>
 </body>
 </html>
