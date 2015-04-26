@@ -1,13 +1,11 @@
-<div>
-    REPORTS
-</div>
-<div data-ng-repeat="item in getTimePeriods()">
-    <div>Start: {{item.start.toString()}}</div>
-    <div>End: {{item.end.toString()}}</div>
-    <div>Times: {{item.times.length}}</div>
-    <div>Total: {{calculateTotalHours(item)}}</div>
-    <div>First Week Hours: {{calculateWeekOneHours(item).hours}}</div>
-    <div>First Week Hours OT: {{calculateWeekOneHours(item).overtime}}</div>
-    <div>Second Week: {{calculateWeekTwoHours(item).hours}}</div>
-    <div>Second Week OT: {{calculateWeekTwoHours(item).overtime}}</div>
+<h1>Time Submission Reports</h1>
+<div class="time-period-container" data-ng-repeat="item in getTimePeriods()">
+    <div class="field">Start: {{item.start.toString()}}</div>
+    <div class="field">End: {{item.end.toString()}}</div>
+    <div class="field">Times: {{item.times.length}}</div>
+    <div class="field">Total: {{calculateTotalHours(item)}}</div>
+    <div class="field">First Week Hours: {{calculateWeekOneHours(item).hours}}</div>
+    <div class="field">First Week Hours OT: {{calculateWeekOneHours(item).overtime}}</div>
+    <div class="field">Second Week: {{calculateWeekTwoHours(item).hours}}</div>
+    <div class="field">Second Week OT: {{calculateWeekTwoHours(item).overtime}}</div>
 </div>

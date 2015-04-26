@@ -9,7 +9,7 @@ nannyTimeModule.config(['$routeProvider', function($routeProvider) {
           controller: 'reportsController'
       })
       .when(
-      '/submitTime/:name', {
+      '/submit/:name', {
           templateUrl: 'submitTime.html',
           controller: 'submitTimeController'
       })
@@ -228,6 +228,6 @@ nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$locatio
         $scope.submitMoreTime = function() {
             $scope.submissionInProgress = false;
             $scope.submissionComplete = false;
-            $location.path('/submit');
+            $location.path('/submit/' + $routeParams.name);
         }
     }]);

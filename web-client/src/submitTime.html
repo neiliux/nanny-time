@@ -1,15 +1,15 @@
 <div class="submit-time-container">
     <div>
         <label>Date</label>
-        <input type="text" bs-datepicker ng-model="selectedDate" />
+        <input type="text" bs-datepicker ng-model="selectedDate" ng-disabled="submissionComplete" />
     </div>
     <div>
         <label>Start Time</label>
-        <input type="text" bs-timepicker ng-model="startTime" />
+        <input type="text" bs-timepicker ng-model="startTime" ng-disabled="submissionComplete" />
     </div>
     <div>
         <label>Stop Time</label>
-        <input type="text" bs-timepicker ng-model="endTime" />
+        <input type="text" bs-timepicker ng-model="endTime" ng-disabled="submissionComplete" />
     </div>
     <div data-ng-show="!submissionComplete && !submissionInProgress">
         <button class="btn btn-primary btn-large" data-ng-click="submit()">Save</button>

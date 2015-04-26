@@ -17,3 +17,12 @@
     color: green;
     font-weight: bold;
 }
+
+.time-period-container {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.time-period-container .field {
+    margin: 5px;
+}
