@@ -22,34 +22,48 @@ nannyTimeModule.config(['$routeProvider', function($routeProvider) {
       });
 }]);
 
-nannyTimeModule.service('PayPeriodService', [
+nannyTimeModule.service('DateService', [
     function() {
         function isSameDate(dateA, dateB) {
-            return moment(dateA).isSame(moment(dateB), 'year') &&
-                moment(dateA).isSame(moment(dateB), 'month') &&
-                moment(dateA).isSame(moment(dateB), 'day');
+            var momentDateA = moment(dateA),
+                momentDateB = moment(dateB);
+
+            return momentDateA.isSame(momentDateB, 'year') &&
+                momentDateA.isSame(momentDateB, 'month') &&
+                momentDateA.isSame(momentDateB, 'day');
         }
 
         function isInRange(date) {
-            return (moment(date).isAfter(this.start) ||
-                    isSameDate(moment(date), this.start)) &&
-                    (moment(date).isBefore(this.end) ||
-                    isSameDate(moment(date), this.end));
+            var momentDate = moment(date);
+
+            return (momentDate.isAfter(this.start) || isSameDate(momentDate, this.start)) &&
+                    (momentDate.isBefore(this.end) || isSameDate(momentDate, this.end));
         }
 
+        return {
+            isSameDate: isSameDate,
+            isInRange: isInRange
+        };
+    }
+]);
+
+nannyTimeModule.service('PayPeriodService', ['DateService',
+    function(dateService) {
         return {
             generatePayPeriods: function() {
                 var periods = [],
                     startDate = moment(new Date(2015, 3, 4));
 
-                for (var i=0; i<100; i++) {
+                // TODO: Refactor so periods can be generated real-time based on
+                // submitted time.
+                for (var i=0; i<1024; i++) {
                     var startOfNextPayPeriod = startDate.clone().add(14, 'days').minutes(0).seconds(0).hours(0);
                     var endOfCurrentPayPeriod = startOfNextPayPeriod.clone().subtract(1, 'days').minutes(0).seconds(0).hours(0);
 
                     periods.push({
                         start: startDate,
                         end: endOfCurrentPayPeriod,
-                        inRange: isInRange,
+                        inRange: dateService.isInRange,
                         times: []
                     });
 
@@ -62,118 +76,98 @@ nannyTimeModule.service('PayPeriodService', [
     }
 ]);
 
-nannyTimeModule.controller('reportsController', ['$scope', '$http', 'PayPeriodService',
-    function($scope, $http, payPeriodService) {
-        var bleh;
+nannyTimeModule.controller('reportsController', ['$scope', '$http', 'PayPeriodService', 'DateService',
+    function($scope, $http, payPeriodService, dateService) {
+        var payPeriods = payPeriodService.generatePayPeriods();
 
         $http.get('http://nanny.htmlbuffet.com/api/get')
             .then(function(result) {
-               console.log(result);
+                var timeSubmissions = result.data;
 
-                _.each(result.data, function(period) {
-                    period.StopTime = period.StopTime.toString();
-                    period.StartTime = period.StartTime.toString();
+                // TODO: This is inefficient.
+                _.each(payPeriods, function(payPeriod) {
+                    _.each(timeSubmissions, function(submission) {
+                        submission.StopTime = submission.StopTime.toString();
+                        submission.StartTime = submission.StartTime.toString();
 
-                    if (period.StopTime.length < 4) {
-                        period.StopTime = '0' + period.StopTime;
-                    }
+                        if (submission.StopTime.length < 4) {
+                            submission.StopTime = '0' + submission.StopTime;
+                        }
 
-                    if (period.StartTime.length < 4) {
-                        period.StartTime = '0' + period.StartTime;
-                    }
+                        if (submission.StartTime.length < 4) {
+                            submission.StartTime = '0' + submission.StartTime;
+                        }
 
-                    period.Date = moment(period.Date).minutes(0).seconds(0).hours(0).toDate();
-                });
+                        submission.Date = moment(submission.Date).minutes(0).seconds(0).hours(0).toDate();
 
-                var times = result.data;
-                var x = payPeriodService.generatePayPeriods();
-                _.each(x, function(item) {
-                    console.log('Pay Period ' + item.start.toString() + ' end ' + item.end.toString());
-                    _.each(times, function(t) {
-                        if (item.inRange(t.Date)) {
-                            console.log('in range! ' + t.Date.toString());
-                            item.times.push(t);
+                        if (payPeriod.inRange(submission.Date)) {
+                            payPeriod.times.push(submission);
                         }
                     });
                 });
-                bleh = x;
             });
 
         $scope.getTimePeriods = function() {
-            var items = [];
-            _.each(bleh, function(b) {
-                if (b.times.length > 0) {
-                    items.push(b);
-                }
+            return _.filter(payPeriods, function(period) {
+                return period.times.length > 0;
             });
-            return items;
         };
 
         $scope.calculateTotalHours = function(period) {
-            var total = 0;
-            _.each(period.times, function(t) {
-                var x = convertToMinutes(t.StopTime) - convertToMinutes(t.StartTime);
-                total += x;
-            });
-            return total/60;
+            return _.reduce(period.times, calculateTotal, 0) / 60;
+
+            function calculateTotal(memo, time) {
+                memo += (convertToMinutes(time.StopTime) - convertToMinutes(time.StartTime));
+                return memo;
+            }
         };
 
         $scope.calculateWeekOneHours = function(period) {
             var endFirstWeekDate = moment(period.start).add(6, 'days');
-            console.log('end of first week: ' + endFirstWeekDate.toString());
-            console.log('start period: ' + period.start.toString());
 
-            var total = 0;
-            _.each(period.times, function(time) {
+            return convertToHoursWithOvertime(
+                _.reduce(period.times, calculateTotal, 0));
+
+            function calculateTotal(memo, time) {
                 if (moment(time.Date).isBefore(endFirstWeekDate) ||
-                    isSameDate(time.Date, endFirstWeekDate)) {
-                    console.log('adding week one hours: ' + moment(time.Date).toDate());
-                    total += convertToMinutes(time.StopTime) - convertToMinutes(time.StartTime);
+                    dateService.isSameDate(time.Date, endFirstWeekDate)) {
+                    memo += convertToMinutes(time.StopTime) - convertToMinutes(time.StartTime);
                 }
-            });
-
-            return convertToHoursWithOvertime(total);
+                return memo;
+            }
         };
 
         $scope.calculateWeekTwoHours = function(period) {
             var startSecondWeekDate = moment(period.end).subtract(6, 'days');
-            console.log('start of second week: ' + startSecondWeekDate.toString());
-            console.log('end period: ' + period.end.toString());
 
-            var total = 0;
-            _.each(period.times, function(time) {
+            return convertToHoursWithOvertime(
+                _.reduce(period.times, calculateTotal, 0));
+
+            function calculateTotal(memo, time) {
                 if (moment(time.Date).isAfter(startSecondWeekDate) ||
-                        isSameDate(time.Date, startSecondWeekDate) ||
-                        isSameDate(time.Date, period.end)) {
-                    console.log('adding week two hours: ' + moment(time.Date).toDate());
-                    total += convertToMinutes(time.StopTime) - convertToMinutes(time.StartTime);
+                    dateService.isSameDate(time.Date, startSecondWeekDate) ||
+                    dateService.isSameDate(time.Date, period.end)) {
+                    memo += convertToMinutes(time.StopTime) - convertToMinutes(time.StartTime);
                 }
-            });
-
-            return convertToHoursWithOvertime(total);
+                return memo;
+            }
         };
-
-        function isSameDate(dateA, dateB) {
-            return moment(dateA).isSame(moment(dateB), 'year') &&
-                moment(dateA).isSame(moment(dateB), 'month') &&
-            moment(dateA).isSame(moment(dateB), 'day');
-        }
 
         function convertToHoursWithOvertime(totalMinutes) {
             var totalHours = totalMinutes / 60;
             return {
                 hours: Math.min(totalHours, 40),
-                overtime: Math.max(totalHours-40, 0)
+                overtime: Math.max(totalHours - 40, 0)
             }
         }
 
         function convertToMinutes(militaryTime) {
-            var x = militaryTime.toString();
-            var subHours = x.substr(0, 2);
-            var subMinutes = x.substr(2, 2);
+            var timeString = militaryTime.toString();
+            var subHours = timeString.substr(0, 2);
+            var subMinutes = timeString.substr(2, 2);
             var hour = parseInt(subHours);
             var minutes = parseInt(subMinutes);
-            return (hour*60) + (minutes);
+            return (hour*60) + minutes;
         }
     }]);
 
@@ -208,9 +202,6 @@ nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$locatio
         $scope.submissionInProgress = false;
 
         $scope.submit = function() {
-            console.log($scope.startTime + ' ' + createMilitaryTime($scope.startTime));
-            console.log($scope.endTime + ' ' + createMilitaryTime($scope.endTime));
-
             $scope.submissionInProgress = true;
 
             $http.post('http://nanny.htmlbuffet.com/api/submit', {
