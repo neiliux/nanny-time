@@ -1,3 +1,13 @@
 <div>
     REPORTS
 </div>
+<div data-ng-repeat="item in getTimePeriods()">
+    <div>Start: {{item.start.toString()}}</div>
+    <div>End: {{item.end.toString()}}</div>
+    <div>Times: {{item.times.length}}</div>
+    <div>Total: {{calculateTotalHours(item)}}</div>
+    <div>First Week Hours: {{calculateWeekOneHours(item).hours}}</div>
+    <div>First Week Hours OT: {{calculateWeekOneHours(item).overtime}}</div>
+    <div>Second Week: {{calculateWeekTwoHours(item).hours}}</div>
+    <div>Second Week OT: {{calculateWeekTwoHours(item).overtime}}</div>
+</div>
