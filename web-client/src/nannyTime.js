@@ -9,12 +9,16 @@ nannyTimeModule.config(['$routeProvider', function($routeProvider) {
           controller: 'reportsController'
       })
       .when(
-      '/submitTime', {
+      '/submitTime/:name', {
           templateUrl: 'submitTime.html',
           controller: 'submitTimeController'
       })
+      .when(
+      '/invalidRequest', {
+          templateUrl: 'invalidRequest.html'
+      })
       .otherwise({
-          redirectTo: '/submitTime'
+          redirectTo: '/invalidRequest'
       });
 }]);
 
@@ -173,8 +177,8 @@ nannyTimeModule.controller('reportsController', ['$scope', '$http', 'PayPeriodSe
         }
     }]);
 
-nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$location',
-    function($scope, $http, $location) {
+nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$location', '$routeParams',
+    function($scope, $http, $location, $routeParams) {
         function createMilitaryTime(date) {
             var rawString = date.toLocaleTimeString().toLocaleLowerCase();
             var rawStringParts = rawString.split(':');
@@ -213,7 +217,8 @@ nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$locatio
                 comment: '',
                 date: $scope.selectedDate,
                 startTime: createMilitaryTime($scope.startTime),
-                stopTime: createMilitaryTime($scope.endTime)
+                stopTime: createMilitaryTime($scope.endTime),
+                name: $routeParams.name
             }).then(function() {
                 $scope.submissionInProgress = false;
                 $scope.submissionComplete = true;
