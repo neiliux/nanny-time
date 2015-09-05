@@ -1,5 +1,16 @@
 <div class="submit-time-container">
     <div>
+        <span class="not-submitted" ng-if="!submissionInProgress && !submissionComplete">
+            YOU HAVE NOT SUBMITTED ANY TIME
+        </span>
+        <span class="in-progress" ng-if="submissionInProgress && !submissionComplete">
+            Please wait while your time is being processed...
+        </span>
+        <span class="complete" ng-if="submissionComplete && !submissionInProgress">
+            Your have successfully submitted time!
+        </span>
+    </div>
+    <div>
         <label>Date</label>
         <input type="text" bs-datepicker ng-model="selectedDate" ng-disabled="submissionComplete" />
     </div>

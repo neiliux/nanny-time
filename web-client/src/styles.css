@@ -26,3 +26,18 @@
 .time-period-container .field {
     margin: 5px;
 }
+
+.not-submitted {
+    font-size: 20pt;
+    color: red;
+}
+
+.in-progress {
+    font-size: 20pt;
+    color: #150fff;
+}
+
+.complete {
+    font-size: 20pt;
+    color: green;
+}
