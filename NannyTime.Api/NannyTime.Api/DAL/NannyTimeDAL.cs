@@ -35,7 +35,8 @@ namespace NannyTime.Api.DAL
                         new XElement("date", timeData.Date),
                         new XElement("start", timeData.StartTime),
                         new XElement("end", timeData.StopTime),
-                        new XElement("comment", timeData.Comment)));
+                        new XElement("comment", timeData.Comment),
+                        new XElement("name", timeData.Name)));
             }
 
             document.Save(GetPath());
@@ -56,7 +57,8 @@ namespace NannyTime.Api.DAL
                     Comment = (string) t.Element("comment"),
                     Date = (DateTime)t.Element("date"),
                     StartTime = (int)t.Element("start"),
-                    StopTime = (int)t.Element("end")
+                    StopTime = (int)t.Element("end"),
+                    Name = (string)t.Element("name")
                 });
         }
 

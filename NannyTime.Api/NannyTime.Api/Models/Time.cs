@@ -8,5 +8,6 @@ namespace NannyTime.Api.Models
         public int StartTime { get; set; }
         public int StopTime { get; set; }
         public string Comment { get; set; }
+        public string Name { get; set; }
     }
 }
