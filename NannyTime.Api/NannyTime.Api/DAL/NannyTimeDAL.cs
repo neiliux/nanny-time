@@ -36,7 +36,8 @@ namespace NannyTime.Api.DAL
                         new XElement("start", timeData.StartTime),
                         new XElement("end", timeData.StopTime),
                         new XElement("comment", timeData.Comment),
-                        new XElement("name", timeData.Name)));
+                        new XElement("name", timeData.Name),
+                        new XElement("submittedDate", timeData.SubmittedDate)));
             }
 
             document.Save(GetPath());
@@ -58,7 +59,8 @@ namespace NannyTime.Api.DAL
                     Date = (DateTime)t.Element("date"),
                     StartTime = (int)t.Element("start"),
                     StopTime = (int)t.Element("end"),
-                    Name = (string)t.Element("name")
+                    Name = (string)t.Element("name"),
+                    SubmittedDate = (string)t.Element("submittedDate")
                 });
         }
 
@@ -74,11 +76,13 @@ namespace NannyTime.Api.DAL
             archiveNode.Add(new XElement("archiveTime",
                     new XElement("comment", (string)timeNode.Element("comment")),
                     new XElement("start", (string)timeNode.Element("start")),
-                    new XElement("end", (string)timeNode.Element("end"))));
+                    new XElement("end", (string)timeNode.Element("end")),
+                    new XElement("submittedDate", (string)timeNode.Element("submittedDate"))));
 
             timeNode.SetElementValue("comment", time.Comment);
             timeNode.SetElementValue("start", time.StartTime);
             timeNode.SetElementValue("end", time.StopTime);
+            timeNode.SetElementValue("submittedDate", time.SubmittedDate);
         }
 
         private static XElement GetExistingTimeEntry(XDocument document, Time time)
