@@ -80,6 +80,8 @@ namespace NannyTime.Api.Controllers
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<div>Submission Time</div>");
                 sb.AppendFormat("<div>{0}</div>", timeData.SubmittedDate);
+                sb.Append("<div>Date</div>");
+                sb.AppendFormat("<div>{0}</div>", timeData.Date.ToString());
                 sb.Append("<div>Name</div>");
                 sb.AppendFormat("<div>{0}</div>", timeData.Name);
                 sb.Append("<div>Start</div>");
