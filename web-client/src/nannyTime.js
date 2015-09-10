@@ -209,6 +209,7 @@ nannyTimeModule.controller('submitTimeController', ['$scope', '$http', '$locatio
                 date: $scope.selectedDate,
                 startTime: createMilitaryTime($scope.startTime),
                 stopTime: createMilitaryTime($scope.endTime),
+                submittedDate: (new Date()).toString(),
                 name: $routeParams.name
             }).then(function() {
                 $scope.submissionInProgress = false;
